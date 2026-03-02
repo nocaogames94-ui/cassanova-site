@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --blood-red: #8B0000;
+    --dark-red: #2D0000;
+    --neon-red: #FF0040;
+    --black: #0A0A0A;
+    --gray: #1A1A1A;
+}
+
+body {
+    background: var(--black);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Efeito de partículas no fundo */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--neon-red);
+    border-radius: 50%;
+    animation: float 10s infinite linear;
+}
+
+@keyframes float {
+    from { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    to { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Glitch effect para o nome */
+.glitch {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: clamp(3rem, 15vw, 8rem);
+    position: relative;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    animation: glitch-skew 1s infinite;
+}
+
+.glitch::before,
+.glitch::after {
+    content: 'CASSANOVA';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--neon-red);
+    clip: rect(24px, 550px, 90px, 0);
+    animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 #00fff9;
+    clip: rect(85px, 550px, 140px, 0);
+    animation: glitch-anim 2.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+    0% { clip: rect(10px, 9999px, 85px, 0); }
+    20% { clip: rect(63px, 9999px, 130px, 0); }
+    40% { clip: rect(25px, 9999px, 15px, 0); }
+    60% { clip: rect(88px, 9999px, 95px, 0); }
+    80% { clip: rect(43px, 9999px, 65px, 0); }
+    100% { clip: rect(15px, 9999px, 120px, 0); }
+}
+
+@keyframes glitch-anim-2 {
+    0% { clip: rect(65px, 9999px, 100px, 0); }
+    20% { clip: rect(15px, 9999px, 65px, 0); }
+    40% { clip: rect(85px, 9999px, 140px, 0); }
+    60% { clip: rect(35px, 9999px, 15px, 0); }
+    80% { clip: rect(95px, 9999px, 85px, 0); }
+    100% { clip: rect(45px, 9999px, 105px, 0); }
+}
+
+@keyframes glitch-skew {
+    0% { transform: skew(0deg); }
+    10% { transform: skew(-2deg); }
+    20% { transform: skew(2deg); }
+    30% { transform: skew(0deg); }
+    100% { transform: skew(0deg); }
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: radial-gradient(ellipse at center, var(--dark-red) 0%, var(--black) 70%);
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05"/></svg>');
+    pointer-events: none;
+}
+
+.subtitle {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    letter-spacing: 0.5em;
+    color: var(--neon-red);
+    margin-top: 1rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+}
+
+/* Player de Música */
+.music-section {
+    padding: 4rem 2rem;
+    background: linear-gradient(180deg, var(--black) 0%, var(--gray) 100%);
+    position: relative;
+}
+
+.player-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 0, 64, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.track-info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.album-art {
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, var(--blood-red), var(--dark-red));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 2rem;
+    color: var(--neon-red);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255, 0, 64, 0.3);
+}
+
+.album-art::before {
+    content: '♪';
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+.track-details h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.track-details p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.audio-player {
+    width: 100%;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 1rem;
+}
