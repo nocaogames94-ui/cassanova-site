@@ -1,26 +1,19 @@
 # Cassanova Site
 
-## Project Documentation
+## 🚀 Visão Geral do Projeto
+Este projeto é uma experiência imersiva que une música e visual. Através de uma interface moderna, buscamos elevar a percepção artística do usuário.
 
-### Overview
-This project is dedicated to providing a unique experience for users through our Cassanova site.
+---
 
-### Accessing the Site on GitHub Pages
-To access the Cassanova site on GitHub Pages, follow these steps:
+### 🎨 Nova Interface e Ajustes Visuais
 
-1. Navigate to the repository at [nocaogames94-ui/cassanova-site](https://github.com/nocaogames94-ui/cassanova-site).
-2. Click on the **Settings** tab.
-3. Scroll down to the **Pages** section.
-4. Under **Source**, select the branch you want to use (usually `main`) and click **Save**.
-5. After a moment, the site will be published at `https://nocaogames94-ui.github.io/cassanova-site/`.
+Para garantir que o nome **Cassanova** apareça completo em qualquer tela e adicionar o novo conceito artístico, utilize as seguintes definições no seu código principal:
 
-### Features
-- User-friendly interface
-- Responsive design
-- Easy navigation between pages
-
-### Contributing
-To contribute to this project, please fork the repository and submit a pull request with your proposed changes.
-
-### Contact
-For any questions or concerns, please reach out to [your-email@example.com].
+#### 1. Ajuste de Tamanho (Responsividade)
+Para que o nome não seja cortado, o estilo CSS deve ser atualizado para:
+```css
+h1.brand-name {
+  font-size: clamp(2rem, 8vw, 5rem); /* Ajusta o tamanho automaticamente conforme a tela */
+  text-align: center;
+  letter-spacing: 2px;
+}
