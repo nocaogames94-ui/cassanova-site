@@ -1,24 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <title>CASSANOVA</title>
+    <title>Cassanova - Experience</title>
+    <style>
+        /* Estilo para deixar o fundo preto e centralizar tudo */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* AJUSTE DO NOME: Aqui ele fica menor para caber na tela */
+        .brand-name {
+            font-size: clamp(2.5rem, 12vw, 6rem); 
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            margin-bottom: 10px;
+            width: 90%; /* Garante que não bata nas bordas */
+        }
+
+        /* TEXTO ARTÍSTICO: "A Grade que Canta" */
+        .art-text {
+            color: #ff0000; /* Vermelho artístico */
+            font-size: clamp(0.9rem, 4vw, 1.2rem);
+            max-width: 80%;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Estilo do Player de Áudio */
+        audio {
+            margin-top: 50px;
+            filter: invert(1); /* Deixa o player branco para combinar */
+            width: 280px;
+        }
+    </style>
 </head>
 <body>
-    <div class="hero">
-        <h1 class="glitch" data-text="CASSANOVA">CASSANOVA</h1>
-        <p class="subtitle">Experience the ultimate blend of music and visuals</p>
-        <div class="particles-animation"></div>
+
+    <h1 class="brand-name">CASSANOVA</h1>
+
+    <div class="art-text">
+        "Aprender a grade que canta é decifrar a geometria do som. <br>
+        Onde o traço encontra o ritmo, a imagem ganha voz."
     </div>
-    <div class="music-player">
-        <audio controls>
-            <source src="your-audio-file.mp3" type="audio/mpeg">
-            Your browser does not support the audio tag.
-        </audio>
-    </div>
-    <script src="script.js"></script>
+
+    <audio controls>
+        <source src="musica.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
 </body>
 </html>
