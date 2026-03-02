@@ -3,57 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <title>CASSANOVA</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            overflow: hidden;
-            background: #121212;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-        
-        .hero {
-            position: relative;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-        }
-        
-        h1 {
-            font-size: 4rem;
-            text-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
-            animation: glitch 1s infinite;
-        }
-
-        @keyframes glitch {
-            0% { text-shadow: 2px 2px 0 rgba(0, 255, 0, 0.5); }
-            50% { text-shadow: -2px -2px 0 rgba(0, 0, 255, 0.5); }
-            100% { text-shadow: 0 0 5px rgba(255, 0, 0, 0.7); }
-        }
-        
-        .music-player {
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body>
     <div class="hero">
-        <h1>CASSANOVA</h1>
-        <audio class="music-player" controls>
-            <source src="your-music-file.mp3" type="audio/mpeg">
+        <h1 class="glitch" data-text="CASSANOVA">CASSANOVA</h1>
+        <p class="subtitle">Experience the ultimate blend of music and visuals</p>
+        <div class="particles-animation"></div>
+    </div>
+    <div class="music-player">
+        <audio controls>
+            <source src="your-audio-file.mp3" type="audio/mpeg">
             Your browser does not support the audio tag.
         </audio>
     </div>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        particlesJS.load('particles-js', 'particles.json', function() {
-            console.log('particles.js loaded - callback');
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
