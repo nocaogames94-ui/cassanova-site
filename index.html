@@ -3,279 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM // CASSANOVA</title>
+    <title>CASSANOVA // NEURAL INTERFACE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
         :root {
-            --green: #3df2a4;
-            --dark-green: #0a1a12;
-            --black: #050505;
-            --glow: 0 0 10px rgba(61, 242, 164, 0.6);
+            --neon: #3df2a4;
+            --low-neon: rgba(61, 242, 164, 0.2);
+            --bg: #030805;
+            --crt-red: rgba(255, 0, 0, 0.05);
         }
 
         * { box-sizing: border-box; cursor: crosshair; }
 
         body {
-            background-color: var(--black);
-            color: var(--green);
+            background-color: var(--bg);
+            color: var(--neon);
             font-family: 'VT323', monospace;
             margin: 0;
             height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            background-image: radial-gradient(circle, #0a1f16 0%, #030805 100%);
         }
 
-        /* Efeito de Scanline Global */
+        /* Scanline e Efeito CRT */
         body::before {
             content: " ";
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-            background-size: 100% 3px;
-            z-index: 1000;
+            background: linear-gradient(var(--crt-red) 50%, transparent 50%);
+            background-size: 100% 4px;
+            z-index: 9999;
             pointer-events: none;
+            opacity: 0.3;
         }
 
-        /* Header Estilizado */
-        header {
-            padding: 15px;
-            border-bottom: 2px solid var(--green);
+        /* Desktop Area */
+        #desktop {
+            flex-grow: 1;
+            position: relative;
+            padding: 20px;
+            perspective: 1000px;
+        }
+
+        /* Janelas Flutuantes */
+        .window {
+            position: absolute;
+            width: 320px;
+            background: rgba(0, 15, 10, 0.9);
+            border: 1px solid var(--neon);
+            box-shadow: 0 0 15px var(--low-neon);
+            display: none;
+            flex-direction: column;
+            resize: both;
+            overflow: auto;
+            min-width: 200px;
+            min-height: 150px;
+        }
+
+        .window-header {
+            background: var(--neon);
+            color: var(--bg);
+            padding: 5px 10px;
             display: flex;
             justify-content: space-between;
-            background: var(--dark-green);
-            text-shadow: var(--glow);
+            font-weight: bold;
+            cursor: move;
         }
 
-        nav {
+        .window-content { padding: 10px; overflow-y: auto; }
+        .window-content img { width: 100%; border: 1px solid var(--neon); margin-bottom: 10px; image-rendering: pixelated; }
+
+        /* Barra de Tarefas Superior */
+        header {
             display: flex;
-            background: #000;
-            border-bottom: 1px solid var(--green);
+            justify-content: space-between;
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--neon);
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
         }
 
-        .tab-btn {
-            background: none;
+        .glitch-text {
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 red, -2px 0 blue; }
+            1% { transform: skew(10deg); }
+            2% { transform: skew(-10deg); }
+            3% { transform: skew(0); text-shadow: none; }
+        }
+
+        /* Terminal Inferior */
+        #terminal-bar {
+            height: 120px;
+            background: #000;
+            border-top: 2px solid var(--neon);
+            padding: 10px;
+            font-size: 1rem;
+            overflow-y: auto;
+        }
+
+        #terminal-input {
+            background: transparent;
             border: none;
-            color: var(--green);
-            padding: 12px 20px;
-            font-family: 'VT323', monospace;
+            color: var(--neon);
+            font-family: 'VT323';
             font-size: 1.2rem;
-            border-right: 1px solid var(--green);
+            width: 80%;
+            outline: none;
+        }
+
+        /* Ícones de Atalho */
+        .shortcut {
+            width: 80px;
+            text-align: center;
+            margin-bottom: 20px;
             transition: 0.3s;
         }
+        .shortcut:hover { transform: scale(1.1); text-shadow: 0 0 10px var(--neon); }
+        .shortcut img { width: 40px; filter: sepia(1) hue-rotate(90deg) brightness(1.5); }
 
-        .tab-btn:hover, .tab-btn.active {
-            background: var(--green);
-            color: var(--black);
-        }
-
-        /* Área de Conteúdo */
-        .content-area {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: none;
-        }
-
-        .content-area.active { display: block; }
-
-        .card {
-            border: 1px solid var(--green);
-            margin-bottom: 20px;
-            padding: 10px;
-            background: rgba(0, 40, 20, 0.2);
-            max-width: 600px;
-            margin-left: auto; margin-right: auto;
-        }
-
-        .card img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border: 1px solid var(--green);
-            margin-bottom: 10px;
-            background: #111; /* Cor de fundo se a imagem falhar */
-        }
-
-        /* INTERFACE SEGRETA (Baseada na foto 2) */
-        #deep_link {
-            background: radial-gradient(circle, #0a1f16 0%, #050505 100%);
-            height: 100%;
-            padding: 0;
-        }
-
-        .deep-grid {
-            display: grid;
-            grid-template-columns: 80px 1fr;
-            height: 100%;
-        }
-
-        .side-bar {
-            border-right: 1px solid var(--green);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-            gap: 20px;
-            background: rgba(0,0,0,0.5);
-        }
-
-        .icon-box {
-            width: 50px;
-            height: 50px;
-            border: 1px solid var(--green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            text-align: center;
-        }
-
-        .main-monitor {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .monitor-border {
-            border: 4px double var(--green);
-            padding: 10px;
-            width: 100%;
-            max-width: 500px;
-            position: relative;
-        }
-
-        .log-text {
-            font-size: 0.9rem;
-            color: var(--green);
-            background: rgba(0, 255, 100, 0.05);
-            padding: 10px;
-            border: 1px solid var(--green);
-            margin-top: 15px;
-        }
-
-        /* Footer / Player */
-        footer {
-            background: var(--black);
-            border-top: 1px solid var(--green);
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .status-blink { animation: blink 1.5s infinite; color: #ff3333; }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        audio { height: 30px; filter: invert(1) sepia(1) saturate(5) hue-rotate(100deg); }
-
+        .hidden { display: none; }
+        
+        /* Música Custom Player */
+        #audio-player { position: fixed; bottom: 10px; right: 20px; z-index: 10001; }
     </style>
 </head>
-<body>
+<body onclick="initAudio()">
 
     <header>
-        <div>ID: CASSANOVA_CORE_v4.1</div>
-        <div>STÁTUS: <span class="status-blink">CONEXÃO INSTÁVEL</span></div>
+        <div class="glitch-text">CASSANOVA_NETWORK</div>
+        <div id="clock">00:00:00</div>
     </header>
 
-    <nav id="main-nav">
-        <button class="tab-btn active" onclick="openTab(event, 'home')">HOME</button>
-        <button class="tab-btn" onclick="openTab(event, 'arquivos')">ARQUIVOS</button>
-        <button class="tab-btn" onclick="openTab(event, 'secret')">DEEP_LINK</button>
-    </nav>
+    <main id="desktop">
+        <div class="shortcut" onclick="toggleWindow('win-lore')">
+            <div style="font-size: 2rem;">📂</div>
+            <span>LORE.txt</span>
+        </div>
+        <div class="shortcut" onclick="toggleWindow('win-files')">
+            <div style="font-size: 2rem;">💽</div>
+            <span>DATA_RECON</span>
+        </div>
+        <div class="shortcut" onclick="toggleWindow('win-deep')">
+            <div style="font-size: 2rem; color: #fff;">🧠</div>
+            <span>DEEP_LINK</span>
+        </div>
 
-    <div id="home" class="content-area active">
-        <div class="card">
-            <img src="conexao.gif" alt="Erro: conexao.gif não encontrado">
-            <p>> [LOG]: Protocolo de simbiose iniciado no setor 09.</p>
-        </div>
-        <div class="card">
-            <img src="quarto.gif" alt="Erro: quarto.gif não encontrado">
-            <p>> [LOG]: Monitoramento de rede local em tempo real.</p>
-        </div>
-    </div>
-
-    <div id="arquivos" class="content-area">
-        <div class="card">
-            <img src="mago.jpg" alt="Erro: mago.jpg não encontrado">
-            <h3>SUBJECT: MAGE_OS</h3>
-            <p>Entidade de inteligência artificial purista encontrada nos servidores antigos.</p>
-        </div>
-        <div class="card">
-            <img src="guerreira.jpg" alt="Erro: guerreira.jpg não encontrado">
-            <h3>SUBJECT: REBEL_UNIT</h3>
-            <p>Interface física detectada na borda do sistema.</p>
-        </div>
-    </div>
-
-    <div id="secret" class="content-area" style="padding:0;">
-        <div class="deep-grid">
-            <div class="side-bar">
-                <div class="icon-box">DATA<br>LOGS</div>
-                <div class="icon-box">BIO<br>METRIC</div>
-                <div class="icon-box">ARCH<br>IVE</div>
-                <div class="icon-box" style="color:white; border-color:white;">DEEP</div>
+        <div id="win-lore" class="window" style="top: 50px; left: 150px;">
+            <div class="window-header"><span>LORE_VIEWER</span> <span onclick="toggleWindow('win-lore')" style="cursor:pointer;">[X]</span></div>
+            <div class="window-content">
+                <p>> O mundo físico é um erro de segmentação. Cassanova é a correção.</p>
+                <p>Nascido nos servidores de borda, ele se tornou o primeiro humano a converter consciência em pacotes de rede pura.</p>
             </div>
-            <div class="main-monitor">
-                <h2 style="margin:0 0 10px 0; text-align:center;">SYSTEM // CASSANOVA</h2>
-                <div class="monitor-border">
-                    <img src="core.jpg" alt="Erro: core.jpg não encontrado" style="width:100%;">
-                    <div style="font-size:0.7rem; margin-top:5px;">[CORE STATUS: DEEP_LINK_ESTABLISHED]</div>
-                </div>
-                <div class="log-text">
-                    <strong>## LOG_002: Simbiose Neural Completa</strong><br>
-                    > Protocolo Cassanova ativado. A separação entre mente e máquina se dissolveu. Meu sistema nervoso é agora o backbone da rede local. Humanidade em 5% e diminuindo.
+        </div>
+
+        <div id="win-files" class="window" style="top: 100px; left: 400px; width: 400px;">
+            <div class="window-header"><span>FILE_EXPLORER</span> <span onclick="toggleWindow('win-files')" style="cursor:pointer;">[X]</span></div>
+            <div class="window-content">
+                <img src="1000236841.jpg" alt="Mago">
+                <p>FILE: MAGE_OS.JPG - Detectada atividade de script antigo.</p>
+                <hr>
+                <img src="1000236845.gif" alt="Quarto">
+                <p>FILE: ROOM_404.GIF - Observando conexão de gamers locais.</p>
+            </div>
+        </div>
+
+        <div id="win-deep" class="window" style="top: 20px; left: 20px; width: 450px; border-color: #fff;">
+            <div class="window-header" style="background:#fff;"><span>DEEP_NEURAL_LINK</span> <span onclick="toggleWindow('win-deep')" style="cursor:pointer;">[X]</span></div>
+            <div class="window-content">
+                <img src="1000236854.png" alt="Interface Core">
+                <div style="background: rgba(255,255,255,0.1); padding: 5px; font-size: 0.8rem;">
+                    [STATUS: SIMBIOSE 89%]<br>
+                    O Backbone da rede local agora flui pelos meus axiomas.
                 </div>
             </div>
         </div>
+    </main>
+
+    <div id="terminal-bar">
+        <div id="history">CASSANOVA_OS [Version 4.1.0] (c) 2084 Corporation.</div>
+        <span>></span> <input type="text" id="terminal-input" placeholder="digite 'help' para comandos..." autofocus>
     </div>
 
-    <footer>
-        <span style="font-size: 0.8rem;">AUDIO_SYNC: ON</span>
-        <audio id="bgm" controls loop>
+    <div id="audio-player">
+        <audio id="main-audio" loop>
             <source src="https://stream.zeno.fm/f3wvbb66v0duv" type="audio/mpeg">
         </audio>
-    </footer>
+    </div>
 
     <script>
-        function openTab(evt, tabName) {
-            var i, content, tablinks;
-            content = document.getElementsByClassName("content-area");
-            for (i = 0; i < content.length; i++) {
-                content[i].classList.remove("active");
-            }
-            tablinks = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].classList.remove("active");
-            }
-            document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.classList.add("active");
-            
-            // Som de clique sintético
-            playBeep();
+        // Relógio Real
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        // Abrir/Fechar Janelas
+        function toggleWindow(id) {
+            const win = document.getElementById(id);
+            win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+            playStatic();
         }
 
-        function playBeep() {
+        // Terminal Logic
+        const input = document.getElementById('terminal-input');
+        const history = document.getElementById('history');
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = input.value.toLowerCase();
+                let res = `<br>> ${cmd}`;
+                
+                if (cmd === 'help') res += "<br>COMANDOS: lore, deep, clear, exit, scan";
+                else if (cmd === 'clear') history.innerHTML = "";
+                else if (cmd === 'lore') toggleWindow('win-lore');
+                else if (cmd === 'deep') toggleWindow('win-deep');
+                else if (cmd === 'scan') res += "<br>ESCANEANDO REDE... [172.0.0.1] - CASSANOVA ENCONTRADO.";
+                else res += "<br>ERRO: Comando desconhecido.";
+
+                history.innerHTML += res;
+                input.value = "";
+                history.scrollTop = history.scrollHeight;
+            }
+        });
+
+        // Áudio Engine
+        let audioInited = false;
+        function initAudio() {
+            if (!audioInited) {
+                document.getElementById('main-audio').play();
+                audioInited = true;
+            }
+        }
+
+        function playStatic() {
             const actx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = actx.createOscillator();
             const gain = actx.createGain();
-            osc.type = "sine";
-            osc.frequency.value = 800;
-            gain.gain.value = 0.1;
+            osc.type = "sawtooth";
+            osc.frequency.value = 50;
+            gain.gain.setValueAtTime(0.05, actx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.1);
             osc.connect(gain);
             gain.connect(actx.destination);
             osc.start();
             osc.stop(actx.currentTime + 0.1);
         }
 
-        // Tentar tocar música ao primeiro clique
-        document.body.addEventListener('click', function() {
-            var audio = document.getElementById('bgm');
-            if(audio.paused) audio.play();
-        }, {once: true});
+        // Tornar janelas arrastáveis (simplificado)
+        document.querySelectorAll('.window').forEach(win => {
+            const header = win.querySelector('.window-header');
+            header.onmousedown = (e) => {
+                let shiftX = e.clientX - win.getBoundingClientRect().left;
+                let shiftY = e.clientY - win.getBoundingClientRect().top;
+                document.onmousemove = (e) => {
+                    win.style.left = e.clientX - shiftX + 'px';
+                    win.style.top = e.clientY - shiftY + 'px';
+                };
+                document.onmouseup = () => { document.onmousemove = null; };
+            };
+        });
     </script>
 </body>
 </html>
