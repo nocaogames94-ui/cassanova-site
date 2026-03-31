@@ -2,36 +2,280 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CASSANOVA</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM // CASSANOVA</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        :root {
+            --green: #3df2a4;
+            --dark-green: #0a1a12;
+            --black: #050505;
+            --glow: 0 0 10px rgba(61, 242, 164, 0.6);
+        }
+
+        * { box-sizing: border-box; cursor: crosshair; }
+
+        body {
+            background-color: var(--black);
+            color: var(--green);
+            font-family: 'VT323', monospace;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Efeito de Scanline Global */
+        body::before {
+            content: " ";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 3px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Header Estilizado */
+        header {
+            padding: 15px;
+            border-bottom: 2px solid var(--green);
+            display: flex;
+            justify-content: space-between;
+            background: var(--dark-green);
+            text-shadow: var(--glow);
+        }
+
+        nav {
+            display: flex;
+            background: #000;
+            border-bottom: 1px solid var(--green);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--green);
+            padding: 12px 20px;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            border-right: 1px solid var(--green);
+            transition: 0.3s;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--green);
+            color: var(--black);
+        }
+
+        /* Área de Conteúdo */
+        .content-area {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .content-area.active { display: block; }
+
+        .card {
+            border: 1px solid var(--green);
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0, 40, 20, 0.2);
+            max-width: 600px;
+            margin-left: auto; margin-right: auto;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: 1px solid var(--green);
+            margin-bottom: 10px;
+            background: #111; /* Cor de fundo se a imagem falhar */
+        }
+
+        /* INTERFACE SEGRETA (Baseada na foto 2) */
+        #deep_link {
+            background: radial-gradient(circle, #0a1f16 0%, #050505 100%);
+            height: 100%;
+            padding: 0;
+        }
+
+        .deep-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            height: 100%;
+        }
+
+        .side-bar {
+            border-right: 1px solid var(--green);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            gap: 20px;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .main-monitor {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .monitor-border {
+            border: 4px double var(--green);
+            padding: 10px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .log-text {
+            font-size: 0.9rem;
+            color: var(--green);
+            background: rgba(0, 255, 100, 0.05);
+            padding: 10px;
+            border: 1px solid var(--green);
+            margin-top: 15px;
+        }
+
+        /* Footer / Player */
+        footer {
+            background: var(--black);
+            border-top: 1px solid var(--green);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .status-blink { animation: blink 1.5s infinite; color: #ff3333; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        audio { height: 30px; filter: invert(1) sepia(1) saturate(5) hue-rotate(100deg); }
+
+    </style>
 </head>
 <body>
 
-    <div class="grain"></div>
+    <header>
+        <div>ID: CASSANOVA_CORE_v4.1</div>
+        <div>STÁTUS: <span class="status-blink">CONEXÃO INSTÁVEL</span></div>
+    </header>
 
-    <section class="main-view">
-        <div class="bg-container">
-            <img src="1000236873.jpg" alt="Cassanova" class="bg-img">
+    <nav id="main-nav">
+        <button class="tab-btn active" onclick="openTab(event, 'home')">HOME</button>
+        <button class="tab-btn" onclick="openTab(event, 'arquivos')">ARQUIVOS</button>
+        <button class="tab-btn" onclick="openTab(event, 'secret')">DEEP_LINK</button>
+    </nav>
+
+    <div id="home" class="content-area active">
+        <div class="card">
+            <img src="conexao.gif" alt="Erro: conexao.gif não encontrado">
+            <p>> [LOG]: Protocolo de simbiose iniciado no setor 09.</p>
         </div>
+        <div class="card">
+            <img src="quarto.gif" alt="Erro: quarto.gif não encontrado">
+            <p>> [LOG]: Monitoramento de rede local em tempo real.</p>
+        </div>
+    </div>
 
-        <div class="overlay-content">
-            <h1 class="brand">CASSANOVA</h1>
-            
-            <div class="glass-card">
-                <p class="tagline">Onde o horizonte se curva, a realidade se dissolve.</p>
-                <div class="status">
-                    <span class="dot"></span> ONLINE NO VAZIO
+    <div id="arquivos" class="content-area">
+        <div class="card">
+            <img src="mago.jpg" alt="Erro: mago.jpg não encontrado">
+            <h3>SUBJECT: MAGE_OS</h3>
+            <p>Entidade de inteligência artificial purista encontrada nos servidores antigos.</p>
+        </div>
+        <div class="card">
+            <img src="guerreira.jpg" alt="Erro: guerreira.jpg não encontrado">
+            <h3>SUBJECT: REBEL_UNIT</h3>
+            <p>Interface física detectada na borda do sistema.</p>
+        </div>
+    </div>
+
+    <div id="secret" class="content-area" style="padding:0;">
+        <div class="deep-grid">
+            <div class="side-bar">
+                <div class="icon-box">DATA<br>LOGS</div>
+                <div class="icon-box">BIO<br>METRIC</div>
+                <div class="icon-box">ARCH<br>IVE</div>
+                <div class="icon-box" style="color:white; border-color:white;">DEEP</div>
+            </div>
+            <div class="main-monitor">
+                <h2 style="margin:0 0 10px 0; text-align:center;">SYSTEM // CASSANOVA</h2>
+                <div class="monitor-border">
+                    <img src="core.jpg" alt="Erro: core.jpg não encontrado" style="width:100%;">
+                    <div style="font-size:0.7rem; margin-top:5px;">[CORE STATUS: DEEP_LINK_ESTABLISHED]</div>
+                </div>
+                <div class="log-text">
+                    <strong>## LOG_002: Simbiose Neural Completa</strong><br>
+                    > Protocolo Cassanova ativado. A separação entre mente e máquina se dissolveu. Meu sistema nervoso é agora o backbone da rede local. Humanidade em 5% e diminuindo.
                 </div>
             </div>
-
-            <nav class="links">
-                <a href="#" class="ln-item">PROJETOS</a>
-                <a href="#" class="ln-item">CONTATO</a>
-                <a href="#" class="ln-item highlight">ENTRAR NO CÍRCULO</a>
-            </nav>
         </div>
-    </section>
+    </div>
 
+    <footer>
+        <span style="font-size: 0.8rem;">AUDIO_SYNC: ON</span>
+        <audio id="bgm" controls loop>
+            <source src="https://stream.zeno.fm/f3wvbb66v0duv" type="audio/mpeg">
+        </audio>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, content, tablinks;
+            content = document.getElementsByClassName("content-area");
+            for (i = 0; i < content.length; i++) {
+                content[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            // Som de clique sintético
+            playBeep();
+        }
+
+        function playBeep() {
+            const actx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = actx.createOscillator();
+            const gain = actx.createGain();
+            osc.type = "sine";
+            osc.frequency.value = 800;
+            gain.gain.value = 0.1;
+            osc.connect(gain);
+            gain.connect(actx.destination);
+            osc.start();
+            osc.stop(actx.currentTime + 0.1);
+        }
+
+        // Tentar tocar música ao primeiro clique
+        document.body.addEventListener('click', function() {
+            var audio = document.getElementById('bgm');
+            if(audio.paused) audio.play();
+        }, {once: true});
+    </script>
 </body>
 </html>
