@@ -1,72 +1,37 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CASSANOVA | A Perspectiva do Horizonte</title>
+    <title>CASSANOVA</title>
     <link rel="stylesheet" href="style.css">
-    <meta name="description" content="A exploração do limiar entre o conhecido e o infinito. Inspirado na obra visual de CASSANOVA.">
-    <meta property="og:title" content="CASSANOVA - Além do Horizonte">
-    <meta property="og:description" content="Uma jornada visual inspirada na imensidão do espaço e do mar.">
-    <meta property="og:image" content="CASSANOVA.png">
-    <link rel="icon" type="image/png" href="CASSANOVA.png"> </head>
+</head>
 <body>
 
-    <header>
-        <div class="header-content">
-            <h1 class="glitch" data-text="CASSANOVA">CASSANOVA</h1>
-            <p>PERSPECTIVAS DO HORIZONTE</p>
+    <div class="grain"></div>
+
+    <section class="main-view">
+        <div class="bg-container">
+            <img src="1000236873.jpg" alt="Cassanova" class="bg-img">
         </div>
-    </header>
 
-    <main>
-        <section class="hero-section">
-            <div class="hero-image-container">
-                <img src="CASSANOVA.png" alt="Mulher de costas em água sobre a curvatura da Terra com um sol vermelho acima" class="hero-image">
-            </div>
-        </section>
-
-        <section class="story-section">
-            <div class="content-wrapper">
-                <h2>A Imensidão Silenciosa</h2>
-                <p>Nesta obra, a figura humana não é o centro, mas o limiar. Posicionada na curvatura de um mundo de água, onde o azul se encontra com o nada, ela é a testemunha solitária.</p>
-                <p>O sol vermelho, uma esfera isolada na escuridão, não é apenas luz, mas um destino, um ponto de reflexão em um oceano que se estende por mundos.</p>
-                <div class="cta-container">
-                    <a href="#galeria" class="btn-explore">Explorar Galeria</a>
+        <div class="overlay-content">
+            <h1 class="brand">CASSANOVA</h1>
+            
+            <div class="glass-card">
+                <p class="tagline">Onde o horizonte se curva, a realidade se dissolve.</p>
+                <div class="status">
+                    <span class="dot"></span> ONLINE NO VAZIO
                 </div>
             </div>
-        </section>
 
-        <section id="galeria" class="gallery-section">
-            <div class="content-wrapper">
-                <h2>Fragmentos de Viagem</h2>
-                <div class="gallery-grid">
-                    <div class="gallery-item"><div class="aspect-ratio-box"><div class="content"><p>A curvatura</p></div></div></div>
-                    <div class="gallery-item"><div class="aspect-ratio-box"><div class="content"><p>A escuridão</p></div></div></div>
-                    <div class="gallery-item"><div class="aspect-ratio-box"><div class="content"><p>O reflexo</p></div></div></div>
-                    <div class="gallery-item"><div class="aspect-ratio-box"><div class="content"><p>A testemunha</p></div></div></div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2023 CASSANOVA Visuals. All rights reserved.</p>
-            <p class="github-link">Visualise on <a href="https://github.com/SeuUsuarioGitHub/SeuRepositorio" target="_blank">GitHub</a></p>
+            <nav class="links">
+                <a href="#" class="ln-item">PROJETOS</a>
+                <a href="#" class="ln-item">CONTATO</a>
+                <a href="#" class="ln-item highlight">ENTRAR NO CÍRCULO</a>
+            </nav>
         </div>
-    </footer>
+    </section>
 
-    <script>
-        // Pequeno script para o efeito de 'glitch' no título ao carregar
-        document.addEventListener('DOMContentLoaded', function() {
-            const h1 = document.querySelector('.glitch');
-            if(h1) {
-                h1.classList.add('animate');
-                setTimeout(() => h1.classList.remove('animate'), 1500);
-            }
-        });
-    </script>
 </body>
 </html>
