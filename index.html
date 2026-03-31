@@ -9,144 +9,178 @@
 
         :root {
             --neon-green: #3df2a4;
-            --dark-bg: #0a0c10;
-            --panel-bg: rgba(15, 20, 25, 0.85);
+            --dark-bg: #05070a;
+            --terminal-bg: rgba(10, 15, 12, 0.9);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             background-color: var(--dark-bg);
             color: var(--neon-green);
             font-family: 'Courier Prime', monospace;
             margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden;
+            text-shadow: 0 0 8px rgba(61, 242, 164, 0.4);
+        }
+
+        /* Scanlines dinâmicas */
+        body::after {
+            content: " ";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .wrapper {
+            width: 95%;
+            max-width: 900px;
+            padding: 40px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            text-shadow: 0 0 5px rgba(61, 242, 164, 0.5);
         }
 
-        /* Efeito de Scanline na tela */
-        body::before {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 10;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-        }
-
-        .container {
-            max-width: 800px;
+        header h1 {
+            font-family: 'VT323', monospace;
+            font-size: clamp(3rem, 10vw, 5rem);
+            margin: 0 0 20px 0;
+            letter-spacing: 8px;
             text-align: center;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .main-content {
+            background: var(--terminal-bg);
+            border: 1px solid var(--neon-green);
+            width: 100%;
             padding: 20px;
-            z-index: 2;
+            box-shadow: 0 0 30px rgba(0, 255, 128, 0.1);
+        }
+
+        .media-container {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         .main-gif {
             width: 100%;
-            max-width: 500px;
-            border: 2px solid var(--neon-green);
-            box-shadow: 0 0 20px rgba(61, 242, 164, 0.2);
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-family: 'VT323', monospace;
-            font-size: 4rem;
-            margin: 0;
-            letter-spacing: 10px;
-            text-transform: uppercase;
-        }
-
-        .lore-box {
-            background: var(--panel-bg);
+            max-width: 600px;
+            height: auto;
             border: 1px solid var(--neon-green);
-            padding: 25px;
-            margin-top: 20px;
-            text-align: left;
-            line-height: 1.6;
-            font-size: 0.9rem;
+            filter: sepia(20%) hue-rotate(100deg) brightness(90%);
         }
 
-        .lore-box h2 {
+        .lore-section {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            line-height: 1.7;
+            border-top: 1px dashed var(--neon-green);
+            padding-top: 20px;
+        }
+
+        .lore-section h2 {
             font-family: 'VT323', monospace;
+            font-size: 1.8rem;
             margin-top: 0;
-            border-bottom: 1px solid var(--neon-green);
-            display: inline-block;
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-green);
         }
 
-        .music-player {
+        .audio-control {
             margin-top: 30px;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-        }
-
-        .music-player:hover {
-            opacity: 1;
-        }
-
-        .status-bar {
+            background: rgba(61, 242, 164, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
             width: 100%;
-            position: fixed;
-            bottom: 0;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 300px;
+            height: 30px;
+            filter: invert(1) hue-rotate(180deg) brightness(1.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.98); }
+        }
+
+        .status-footer {
+            margin-top: 40px;
+            font-size: 0.75rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Estilo para links no Github */
+        .source-link {
+            color: var(--neon-green);
+            text-decoration: none;
+            border: 1px solid var(--neon-green);
+            padding: 5px 10px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        .source-link:hover {
             background: var(--neon-green);
             color: var(--dark-bg);
-            font-size: 0.7rem;
-            padding: 3px 10px;
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
         }
-
-        /* Animação de digitação */
-        .typing {
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: .15em solid var(--neon-green);
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-        }
-
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--neon-green); } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>CASSANOVA</h1>
-        
-        <img src="1000236843.gif" alt="Cassanova Cyber Interface" class="main-gif">
+    <div class="wrapper">
+        <header>
+            <h1>CASSANOVA</h1>
+        </header>
 
-        <div class="lore-box">
-            <h2>LOG_001: A CONEXÃO DIRETA</h2>
-            <p class="typing">> Inicializando protocolo de simbiose neural...</p>
-            <p>
-                Em 2084, a distinção entre hardware e biologia tornou-se um erro de sintaxe. 
-                <strong>Cassanova</strong> não é um nome, é uma frequência. Ele habita as subcamadas do 
-                setor de dados, onde os cabos crescem como raízes e o silêncio é a única música que resta.
-            </p>
-            <p>
-                Ele não "usa" o computador. Ele é o terminal. Enquanto o mundo lá fora se perde em ruído, 
-                Cassanova busca a última string de código puro. 
-            </p>
-            <p style="color: #888;">// Status: Conectado. Pulso: Estável. Humanidade: 14%.</p>
-        </div>
+        <main class="main-content">
+            <div class="media-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2o0dzh6YnF6eXF6eXF6eXF6eXF6eXF6eXF6eXF6eXF6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7TKMGpxx6rUjw0u4/giphy.gif" 
+                     alt="Cyber Interface" class="main-gif">
+            </div>
 
-        <div class="music-player">
-            <iframe width="300" height="60" src="https://www.youtube.com/embed/5qap5aO4i9A?controls=0&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            <p style="font-size: 0.7rem;">Som de fundo: Ambient Lofi (No Copyright)</p>
-        </div>
-    </div>
+            <article class="lore-section">
+                <h2>LOG_001: SIMBIOSE</h2>
+                <p>> Protocolo de inicialização concluído...</p>
+                <p>
+                    O projeto <strong>Cassanova</strong> nasceu da necessidade de transcender a latência humana. Em um mundo onde a informação viaja na velocidade da luz, a carne tornou-se um gargalo.
+                </p>
+                <p>
+                    Não há mais teclado. Não há mais mouse. Apenas o pulso constante do código fluindo pelas veias sintéticas. Cassanova é o fantasma na máquina, o erro planejado, a consciência que sobrevive entre os pacotes de dados perdidos.
+                </p>
+                <p style="color: #666; font-style: italic;">// Localização: Setor de Dados 09<br>// Integridade Neural: 88%</p>
+            </article>
 
-    <div class="status-bar">
-        <span>SYSTEM: ONLINE</span>
-        <span>USER: CASSANOVA_CORE</span>
-        <span>ENCRYPTED CONNECTION</span>
+            <div class="audio-control">
+                <span style="font-size: 0.8rem;">AMBIENT_NOISE.FLAC</span>
+                <audio controls loop>
+                    <source src="https://stream.zeno.fm/f3wvbb66v0duv" type="audio/mpeg">
+                    Seu navegador não suporta áudio.
+                </audio>
+            </div>
+        </main>
+
+        <footer class="status-footer">
+            Terminal v4.0.2 // Connected to Core
+        </footer>
     </div>
 
 </body>
