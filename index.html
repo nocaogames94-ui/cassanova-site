@@ -3,273 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CASSANOVA // NEURAL INTERFACE</title>
+    <title>CASSANOVA // NEURAL_SIMBIOSIS</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
         :root {
-            --neon: #3df2a4;
-            --low-neon: rgba(61, 242, 164, 0.2);
-            --bg: #030805;
-            --crt-red: rgba(255, 0, 0, 0.05);
+            --primary: #3df2a4;
+            --secondary: #004422;
+            --bg: #020504;
+            --error: #ff3333;
         }
 
         * { box-sizing: border-box; cursor: crosshair; }
 
         body {
             background-color: var(--bg);
-            color: var(--neon);
-            font-family: 'VT323', monospace;
+            color: var(--primary);
+            font-family: 'Share Tech Mono', monospace;
             margin: 0;
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            background-image: radial-gradient(circle, #0a1f16 0%, #030805 100%);
+            text-transform: uppercase;
         }
 
-        /* Scanline e Efeito CRT */
-        body::before {
-            content: " ";
+        /* Camada de Filtro CRT/Glitch */
+        .crt-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(var(--crt-red) 50%, transparent 50%);
-            background-size: 100% 4px;
-            z-index: 9999;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+            background-size: 100% 3px, 3px 100%;
+            z-index: 100;
             pointer-events: none;
-            opacity: 0.3;
+            opacity: 0.4;
         }
 
-        /* Desktop Area */
-        #desktop {
-            flex-grow: 1;
-            position: relative;
-            padding: 20px;
-            perspective: 1000px;
-        }
-
-        /* Janelas Flutuantes */
-        .window {
-            position: absolute;
-            width: 320px;
-            background: rgba(0, 15, 10, 0.9);
-            border: 1px solid var(--neon);
-            box-shadow: 0 0 15px var(--low-neon);
-            display: none;
-            flex-direction: column;
-            resize: both;
-            overflow: auto;
-            min-width: 200px;
-            min-height: 150px;
-        }
-
-        .window-header {
-            background: var(--neon);
-            color: var(--bg);
-            padding: 5px 10px;
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-            cursor: move;
-        }
-
-        .window-content { padding: 10px; overflow-y: auto; }
-        .window-content img { width: 100%; border: 1px solid var(--neon); margin-bottom: 10px; image-rendering: pixelated; }
-
-        /* Barra de Tarefas Superior */
+        /* Header Dinâmico */
         header {
             display: flex;
             justify-content: space-between;
-            padding: 10px 20px;
-            border-bottom: 1px solid var(--neon);
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
+            padding: 10px 30px;
+            border-bottom: 1px solid var(--primary);
+            background: rgba(0, 20, 10, 0.5);
+            box-shadow: 0 0 20px var(--secondary);
         }
 
-        .glitch-text {
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            animation: glitch 3s infinite;
+        .system-status { animation: blink 0.8s infinite; color: var(--error); }
+
+        /* Grade Principal */
+        main {
+            display: grid;
+            grid-template-columns: 250px 1fr 250px;
+            flex-grow: 1;
+            gap: 15px;
+            padding: 15px;
+            filter: url(#glitch); /* Aplica o filtro de glitch SVG */
         }
 
-        @keyframes glitch {
-            0% { text-shadow: 2px 0 red, -2px 0 blue; }
-            1% { transform: skew(10deg); }
-            2% { transform: skew(-10deg); }
-            3% { transform: skew(0); text-shadow: none; }
-        }
-
-        /* Terminal Inferior */
-        #terminal-bar {
-            height: 120px;
-            background: #000;
-            border-top: 2px solid var(--neon);
+        .side-panel {
+            border: 1px solid var(--secondary);
+            background: rgba(0, 15, 8, 0.8);
             padding: 10px;
-            font-size: 1rem;
-            overflow-y: auto;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        #terminal-input {
-            background: transparent;
-            border: none;
-            color: var(--neon);
-            font-family: 'VT323';
-            font-size: 1.2rem;
-            width: 80%;
-            outline: none;
+        .core-display {
+            border: 2px solid var(--primary);
+            position: relative;
+            background: rgba(0, 0, 0, 0.9);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Ícones de Atalho */
-        .shortcut {
-            width: 80px;
-            text-align: center;
-            margin-bottom: 20px;
+        .main-visual {
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 30px var(--secondary);
+            image-rendering: pixelated;
+        }
+
+        /* Janela de Log Flutuante */
+        .log-window {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 300px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--primary);
+            padding: 10px;
+            font-size: 0.7rem;
+            overflow-y: hidden;
+        }
+
+        /* Botões de Comando */
+        .cmd-btn {
+            background: var(--secondary);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 5px;
             transition: 0.3s;
         }
-        .shortcut:hover { transform: scale(1.1); text-shadow: 0 0 10px var(--neon); }
-        .shortcut img { width: 40px; filter: sepia(1) hue-rotate(90deg) brightness(1.5); }
 
-        .hidden { display: none; }
-        
-        /* Música Custom Player */
-        #audio-player { position: fixed; bottom: 10px; right: 20px; z-index: 10001; }
+        .cmd-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        /* Rodapé de Batimento Cardíaco */
+        footer {
+            height: 50px;
+            border-top: 1px solid var(--primary);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 0.8rem;
+        }
+
+        .heart-rate { width: 100px; height: 30px; margin-left: 20px; }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Script de Carregamento */
+        #boot-screen {
+            position: fixed;
+            top:0; left:0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+
+        .loader { width: 0%; height: 2px; background: var(--primary); margin-top: 10px; transition: 2s; }
     </style>
 </head>
-<body onclick="initAudio()">
+<body onclick="startCore()">
+
+    <svg style="display: none;">
+        <defs>
+            <filter id="glitch">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="1" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+            </filter>
+        </defs>
+    </svg>
+
+    <div id="boot-screen">
+        <div id="boot-text">CARREGANDO CASSANOVA_CORE...</div>
+        <div class="loader" id="loader-bar"></div>
+    </div>
+
+    <div class="crt-overlay"></div>
 
     <header>
-        <div class="glitch-text">CASSANOVA_NETWORK</div>
-        <div id="clock">00:00:00</div>
+        <div>NODE: ALPHA-7 // CASSANOVA</div>
+        <div class="system-status">NEURAL_LINK: ACTIVE</div>
     </header>
 
-    <main id="desktop">
-        <div class="shortcut" onclick="toggleWindow('win-lore')">
-            <div style="font-size: 2rem;">📂</div>
-            <span>LORE.txt</span>
-        </div>
-        <div class="shortcut" onclick="toggleWindow('win-files')">
-            <div style="font-size: 2rem;">💽</div>
-            <span>DATA_RECON</span>
-        </div>
-        <div class="shortcut" onclick="toggleWindow('win-deep')">
-            <div style="font-size: 2rem; color: #fff;">🧠</div>
-            <span>DEEP_LINK</span>
+    <main>
+        <div class="side-panel">
+            <div style="border-bottom: 1px solid var(--primary);">[BIOMETRICS]</div>
+            <p>PULSE: 145 BPM</p>
+            <p>SYNC: 92.4%</p>
+            <p>O2: 12% [CRITICAL]</p>
+            <hr style="border: 0.5px solid var(--secondary); width: 100%;">
+            <img src="1000236841.jpg" alt="Mago" style="width: 100%; filter: grayscale(1) brightness(0.7) sepia(1) hue-rotate(90deg);">
+            <p style="font-size: 0.6rem;">ENTITY_01: "THE MAGE"</p>
         </div>
 
-        <div id="win-lore" class="window" style="top: 50px; left: 150px;">
-            <div class="window-header"><span>LORE_VIEWER</span> <span onclick="toggleWindow('win-lore')" style="cursor:pointer;">[X]</span></div>
-            <div class="window-content">
-                <p>> O mundo físico é um erro de segmentação. Cassanova é a correção.</p>
-                <p>Nascido nos servidores de borda, ele se tornou o primeiro humano a converter consciência em pacotes de rede pura.</p>
+        <div class="core-display">
+            <img src="1000236854.png" id="main-image" class="main-visual" alt="Core View">
+            
+            <div class="log-window">
+                <div style="border-bottom: 1px solid var(--primary); margin-bottom: 5px;">> LIVE_LOGS</div>
+                <div id="log-text" style="line-height: 1.2;"></div>
             </div>
         </div>
 
-        <div id="win-files" class="window" style="top: 100px; left: 400px; width: 400px;">
-            <div class="window-header"><span>FILE_EXPLORER</span> <span onclick="toggleWindow('win-files')" style="cursor:pointer;">[X]</span></div>
-            <div class="window-content">
-                <img src="1000236841.jpg" alt="Mago">
-                <p>FILE: MAGE_OS.JPG - Detectada atividade de script antigo.</p>
-                <hr>
-                <img src="1000236845.gif" alt="Quarto">
-                <p>FILE: ROOM_404.GIF - Observando conexão de gamers locais.</p>
-            </div>
-        </div>
-
-        <div id="win-deep" class="window" style="top: 20px; left: 20px; width: 450px; border-color: #fff;">
-            <div class="window-header" style="background:#fff;"><span>DEEP_NEURAL_LINK</span> <span onclick="toggleWindow('win-deep')" style="cursor:pointer;">[X]</span></div>
-            <div class="window-content">
-                <img src="1000236854.png" alt="Interface Core">
-                <div style="background: rgba(255,255,255,0.1); padding: 5px; font-size: 0.8rem;">
-                    [STATUS: SIMBIOSE 89%]<br>
-                    O Backbone da rede local agora flui pelos meus axiomas.
-                </div>
+        <div class="side-panel">
+            <div style="border-bottom: 1px solid var(--primary);">[ARCHIVE]</div>
+            <button class="cmd-btn" onclick="changeView('1000236854.png', 'Protocolo de Simbiose Completo.')">DEEP_CORE</button>
+            <button class="cmd-btn" onclick="changeView('1000236843.gif', 'Conexão neural estabelecida no terminal.')">THE_INTERFACE</button>
+            <button class="cmd-btn" onclick="changeView('1000236845.gif', 'Monitorando setor habitacional 404.')">HABITAT_VIEW</button>
+            <button class="cmd-btn" onclick="changeView('1000236844.jpg', 'Unidades de defesa detectadas.')">DEFENSE_RECON</button>
+            
+            <div style="margin-top: auto; color: var(--primary); font-size: 0.7rem;">
+                [!] AVISO: A DESCONEXÃO AGORA RESULTARÁ EM MORTE CEREBRAL.
             </div>
         </div>
     </main>
 
-    <div id="terminal-bar">
-        <div id="history">CASSANOVA_OS [Version 4.1.0] (c) 2084 Corporation.</div>
-        <span>></span> <input type="text" id="terminal-input" placeholder="digite 'help' para comandos..." autofocus>
-    </div>
-
-    <div id="audio-player">
-        <audio id="main-audio" loop>
+    <footer>
+        <span>BGM: CALMA_PROFUNDA.WAV</span>
+        <canvas id="heart-wave" class="heart-rate"></canvas>
+        <audio id="bgm" loop>
             <source src="https://stream.zeno.fm/f3wvbb66v0duv" type="audio/mpeg">
         </audio>
-    </div>
+    </footer>
 
     <script>
-        // Relógio Real
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
+        // Simulação de Boot
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('loader-bar').style.width = '100%';
+                setTimeout(() => {
+                    document.getElementById('boot-screen').style.display = 'none';
+                }, 2000);
+            }, 500);
+        };
 
-        // Abrir/Fechar Janelas
-        function toggleWindow(id) {
-            const win = document.getElementById(id);
-            win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
-            playStatic();
+        function startCore() {
+            document.getElementById('bgm').play();
+            addLog("Iniciando interface neural...");
+            addLog("Conectando batimentos cardíacos...");
+            drawHeartWave();
         }
 
-        // Terminal Logic
-        const input = document.getElementById('terminal-input');
-        const history = document.getElementById('history');
-
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const cmd = input.value.toLowerCase();
-                let res = `<br>> ${cmd}`;
-                
-                if (cmd === 'help') res += "<br>COMANDOS: lore, deep, clear, exit, scan";
-                else if (cmd === 'clear') history.innerHTML = "";
-                else if (cmd === 'lore') toggleWindow('win-lore');
-                else if (cmd === 'deep') toggleWindow('win-deep');
-                else if (cmd === 'scan') res += "<br>ESCANEANDO REDE... [172.0.0.1] - CASSANOVA ENCONTRADO.";
-                else res += "<br>ERRO: Comando desconhecido.";
-
-                history.innerHTML += res;
-                input.value = "";
-                history.scrollTop = history.scrollHeight;
-            }
-        });
-
-        // Áudio Engine
-        let audioInited = false;
-        function initAudio() {
-            if (!audioInited) {
-                document.getElementById('main-audio').play();
-                audioInited = true;
-            }
+        function changeView(img, text) {
+            document.getElementById('main-image').src = img;
+            addLog(text);
+            playBeep();
         }
 
-        function playStatic() {
-            const actx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = actx.createOscillator();
-            const gain = actx.createGain();
-            osc.type = "sawtooth";
-            osc.frequency.value = 50;
-            gain.gain.setValueAtTime(0.05, actx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + 0.1);
+        function addLog(msg) {
+            const log = document.getElementById('log-text');
+            log.innerHTML += `> ${msg}<br>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function playBeep() {
+            const ctx = new AudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.frequency.value = 1200;
+            gain.gain.value = 0.05;
             osc.connect(gain);
-            gain.connect(actx.destination);
+            gain.connect(ctx.destination);
             osc.start();
-            osc.stop(actx.currentTime + 0.1);
+            osc.stop(ctx.currentTime + 0.05);
         }
 
-        // Tornar janelas arrastáveis (simplificado)
-        document.querySelectorAll('.window').forEach(win => {
-            const header = win.querySelector('.window-header');
-            header.onmousedown = (e) => {
-                let shiftX = e.clientX - win.getBoundingClientRect().left;
-                let shiftY = e.clientY - win.getBoundingClientRect().top;
-                document.onmousemove = (e) => {
-                    win.style.left = e.clientX - shiftX + 'px';
-                    win.style.top = e.clientY - shiftY + 'px';
-                };
-                document.onmouseup = () => { document.onmousemove = null; };
-            };
-        });
+        // Desenha o gráfico de batimentos
+        function drawHeartWave() {
+            const canvas = document.getElementById('heart-wave');
+            const ctx = canvas.getContext('2d');
+            let x = 0;
+            function animate() {
+                ctx.fillStyle = 'rgba(2, 5, 4, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = '#3df2a4';
+                ctx.beginPath();
+                ctx.moveTo(x, canvas.height/2 + Math.sin(x*0.5)*10);
+                x += 2;
+                if(x > canvas.width) x = 0;
+                ctx.lineTo(x, canvas.height/2 + Math.sin(x*0.5)*10);
+                ctx.stroke();
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
     </script>
 </body>
 </html>
