@@ -3,67 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cassanova - Experience</title>
+    <title>Cassanova | System Core</title>
     <style>
-        /* Estilo para deixar o fundo preto e centralizar tudo */
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=VT323&display=swap');
+
+        :root {
+            --neon-green: #3df2a4;
+            --dark-bg: #0a0c10;
+            --panel-bg: rgba(15, 20, 25, 0.85);
+        }
+
         body {
+            background-color: var(--dark-bg);
+            color: var(--neon-green);
+            font-family: 'Courier Prime', monospace;
             margin: 0;
-            padding: 0;
-            background-color: #050505;
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
+            overflow-x: hidden;
+            text-shadow: 0 0 5px rgba(61, 242, 164, 0.5);
+        }
+
+        /* Efeito de Scanline na tela */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 10;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 800px;
             text-align: center;
-            overflow: hidden;
+            padding: 20px;
+            z-index: 2;
         }
 
-        /* AJUSTE DO NOME: Aqui ele fica menor para caber na tela */
-        .brand-name {
-            font-size: clamp(2.5rem, 12vw, 6rem); 
-            font-weight: bold;
+        .main-gif {
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid var(--neon-green);
+            box-shadow: 0 0 20px rgba(61, 242, 164, 0.2);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'VT323', monospace;
+            font-size: 4rem;
+            margin: 0;
+            letter-spacing: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.5rem;
-            margin-bottom: 10px;
-            width: 90%; /* Garante que não bata nas bordas */
         }
 
-        /* TEXTO ARTÍSTICO: "A Grade que Canta" */
-        .art-text {
-            color: #ff0000; /* Vermelho artístico */
-            font-size: clamp(0.9rem, 4vw, 1.2rem);
-            max-width: 80%;
-            line-height: 1.6;
-            letter-spacing: 1px;
+        .lore-box {
+            background: var(--panel-bg);
+            border: 1px solid var(--neon-green);
+            padding: 25px;
             margin-top: 20px;
-            font-style: italic;
-            opacity: 0.8;
+            text-align: left;
+            line-height: 1.6;
+            font-size: 0.9rem;
         }
 
-        /* Estilo do Player de Áudio */
-        audio {
-            margin-top: 50px;
-            filter: invert(1); /* Deixa o player branco para combinar */
-            width: 280px;
+        .lore-box h2 {
+            font-family: 'VT323', monospace;
+            margin-top: 0;
+            border-bottom: 1px solid var(--neon-green);
+            display: inline-block;
         }
+
+        .music-player {
+            margin-top: 30px;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .music-player:hover {
+            opacity: 1;
+        }
+
+        .status-bar {
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            background: var(--neon-green);
+            color: var(--dark-bg);
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+
+        /* Animação de digitação */
+        .typing {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: .15em solid var(--neon-green);
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--neon-green); } }
     </style>
 </head>
 <body>
 
-    <h1 class="brand-name">CASSANOVA</h1>
+    <div class="container">
+        <h1>CASSANOVA</h1>
+        
+        <img src="1000236843.gif" alt="Cassanova Cyber Interface" class="main-gif">
 
-    <div class="art-text">
-        "Aprender a grade que canta é decifrar a geometria do som. <br>
-        Onde o traço encontra o ritmo, a imagem ganha voz."
+        <div class="lore-box">
+            <h2>LOG_001: A CONEXÃO DIRETA</h2>
+            <p class="typing">> Inicializando protocolo de simbiose neural...</p>
+            <p>
+                Em 2084, a distinção entre hardware e biologia tornou-se um erro de sintaxe. 
+                <strong>Cassanova</strong> não é um nome, é uma frequência. Ele habita as subcamadas do 
+                setor de dados, onde os cabos crescem como raízes e o silêncio é a única música que resta.
+            </p>
+            <p>
+                Ele não "usa" o computador. Ele é o terminal. Enquanto o mundo lá fora se perde em ruído, 
+                Cassanova busca a última string de código puro. 
+            </p>
+            <p style="color: #888;">// Status: Conectado. Pulso: Estável. Humanidade: 14%.</p>
+        </div>
+
+        <div class="music-player">
+            <iframe width="300" height="60" src="https://www.youtube.com/embed/5qap5aO4i9A?controls=0&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <p style="font-size: 0.7rem;">Som de fundo: Ambient Lofi (No Copyright)</p>
+        </div>
     </div>
 
-    <audio controls>
-        <source src="musica.mp3" type="audio/mpeg">
-        Seu navegador não suporta o elemento de áudio.
-    </audio>
+    <div class="status-bar">
+        <span>SYSTEM: ONLINE</span>
+        <span>USER: CASSANOVA_CORE</span>
+        <span>ENCRYPTED CONNECTION</span>
+    </div>
 
 </body>
 </html>
